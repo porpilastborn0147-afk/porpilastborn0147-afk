@@ -1,93 +1,135 @@
-```html name=templates/transfer.html
 {% extends "base.html" %}
 
-{% block title %}Transfer Funds - Demo Bank{% endblock %}
+{% block title %}Transfer - Flask Banking Demo{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <div class="card shadow-sm mb-4">
-      <div class="card-body">
-        <h4 class="card-title mb-1">Simulated Transfer</h4>
-        <p class="text-muted small mb-3">This is a DEMO action — all balances and transactions are simulated. No real money moves.</p>
+<div class="row">
+    <div class="col-lg-6 col-md-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <!-- Header -->
+                <div class="text-center mb-4">
+                    <h2 class="card-title mb-2">🔄 Money Transfer</h2>
+                    <p class="text-muted">Send simulated funds to another account</p>
+                </div>
 
-        <form method="post" action="{{ url_for('transfer') }}" novalidate>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="from_account" class="form-label">From (your account)</label>
-              <select id="from_account" name="from_account" class="form-select" required>
-                {% if accounts %}
-                  {% for acc in accounts %}
-                    <option value="{{ acc.id }}">{{ acc.name }} — {% if format_currency is defined %}{{ format_currency(acc.balance) }}{% else %}${{ '%.2f'|format(acc.balance) }}{% endif %}</option>
-                  {% endfor %}
-                {% else %}
-                  <option disabled>No accounts available</option>
-                {% endif %}
-              </select>
-            </div>
+                <!-- Simulation Notice -->
+                <div class="alert alert-info" role="alert">
+                    <small>
+                        <strong>ℹ️ Notice:</strong> This transfer is simulated for demonstration purposes. 
+                        No real money will be transferred.
+                    </small>
+                </div>
 
-            <div class="col-md-6 mb-3">
-              <label for="to_account" class="form-label">To (account id or recipient)</label>
-              <input id="to_account" name="to_account" type="text" class="form-control" placeholder="Recipient account id or description" required>
-              <div class="form-text small text-muted">You may enter one of your account IDs or an external demo recipient identifier.</div>
-            </div>
-          </div>
+                <!-- Transfer Form -->
+                <form method="POST" action="/transfer" novalidate>
+                    <!-- Recipient Name Field -->
+                    <div class="mb-3">
+                        <label for="recipient_name" class="form-label">Recipient Name</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="recipient_name" 
+                            name="recipient_name" 
+                            placeholder="Enter recipient's full name"
+                            required
+                        >
+                        <small class="form-text text-muted">Full name of the recipient.</small>
+                    </div>
 
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="amount" class="form-label">Amount (USD)</label>
-              <input id="amount" name="amount" type="number" class="form-control" step="0.01" min="0.01" placeholder="0.00" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="note" class="form-label">Note (optional)</label>
-              <input id="note" name="note" type="text" class="form-control" placeholder="Payment for...">
-            </div>
-          </div>
+                    <!-- Account Number Field -->
+                    <div class="mb-3">
+                        <label for="account_number" class="form-label">Account Number</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="account_number" 
+                            name="account_number" 
+                            placeholder="Enter recipient's account number"
+                            pattern="[0-9]+"
+                            maxlength="20"
+                            required
+                        >
+                        <small class="form-text text-muted">Recipient's bank account number.</small>
+                    </div>
 
-          <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary">Send (Simulated)</button>
-            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
-          </div>
-        </form>
-      </div>
+                    <!-- Amount Field -->
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Amount ($)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                id="amount" 
+                                name="amount" 
+                                placeholder="0.00"
+                                step="0.01"
+                                min="0.01"
+                                max="2000000"
+                                required
+                            >
+                        </div>
+                        <small class="form-text text-muted">Available balance: $2,000,000.00</small>
+                    </div>
+
+                    <!-- Description Field -->
+                    <div class="mb-4">
+                        <label for="description" class="form-label">Description (Optional)</label>
+                        <textarea 
+                            class="form-control" 
+                            id="description" 
+                            name="description" 
+                            rows="3"
+                            placeholder="Enter transfer description or reference"
+                            maxlength="500"
+                        ></textarea>
+                        <small class="form-text text-muted">Add a note for this transfer (e.g., 'Rent payment', 'Loan repayment').</small>
+                    </div>
+
+                    <!-- Transfer Button -->
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            🔄 Send Transfer
+                        </button>
+                    </div>
+
+                    <!-- Cancel Button -->
+                    <div class="d-grid">
+                        <a href="/dashboard" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Information Card -->
+        <div class="card mt-4 bg-light">
+            <div class="card-body">
+                <h6 class="card-title">ℹ️ Transfer Information</h6>
+                <ul class="list-unstyled small mb-0">
+                    <li class="mb-2">
+                        <strong>Processing Time:</strong> Instant (Simulated)
+                    </li>
+                    <li class="mb-2">
+                        <strong>Transfer Limits:</strong> Up to $2,000,000 per transfer
+                    </li>
+                    <li class="mb-2">
+                        <strong>Fees:</strong> No fees applied (Demonstration only)
+                    </li>
+                    <li>
+                        <strong>Status:</strong> You'll receive confirmation after transfer
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Demo Warning -->
+        <div class="alert alert-warning mt-4" role="alert">
+            <strong>⚠️ Demo Application:</strong> This is a demonstration banking application. 
+            All transfers and transactions are simulated and not real. No actual money will be transferred.
+        </div>
     </div>
-
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h5 class="card-title mb-2">Recent Simulated Transactions</h5>
-        <p class="small text-muted mb-3">These are sample/demo transactions. Transfers you perform here will appear in this list.</p>
-
-        {% if transactions %}
-          <div class="table-responsive">
-            <table class="table table-sm table-hover">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Account</th>
-                  <th>Description</th>
-                  <th class="text-end">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for t in transactions %}
-                  <tr>
-                    <td class="text-nowrap">{{ t.timestamp.strftime("%Y-%m-%d %H:%M:%S") if t.timestamp else '-' }}</td>
-                    <td>
-                      {% if t.account %}{{ t.account.name }} <br><small class="text-muted">ID: {{ t.account.id }}</small>{% else %}Account {{ t.account_id }}{% endif %}
-                    </td>
-                    <td>{{ t.description or t.type }}{% if t.other_account %}<br><small class="text-muted">Other: {{ t.other_account }}</small>{% endif %}</td>
-                    <td class="text-end">{% if format_currency is defined %}{{ format_currency(t.amount) }}{% else %}${{ '%.2f'|format(t.amount) }}{% endif %}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        {% else %}
-          <p class="small text-muted mb-0">No simulated transactions yet. Make a transfer to create one.</p>
-        {% endif %}
-      </div>
-    </div>
-  </div>
 </div>
 {% endblock %}
-```
