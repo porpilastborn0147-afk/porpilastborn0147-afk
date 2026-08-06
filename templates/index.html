@@ -1,10 +1,113 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Demo Banking App</title>
-</head>
-<body>
-    <h1>Welcome to the Demo Banking App</h1>
-    <p>This is a demo application for training purposes only.</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Home - Flask Banking Demo{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- Welcome Section -->
+        <div class="card mb-4">
+            <div class="card-body text-center py-5">
+                <h1 class="card-title mb-3">🏦 Welcome to Banking Demo</h1>
+                <p class="card-text lead mb-4">
+                    A demonstration banking application built with Flask for educational purposes.
+                </p>
+                <p class="text-muted">
+                    This is a <strong>DEMO APPLICATION</strong>. No real money is involved. All balances, transactions, 
+                    and account data are simulated for learning and demonstration purposes only.
+                </p>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-4">Features</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <span class="badge bg-primary rounded-pill p-2">💳</span>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Account Management</h6>
+                                <p class="text-muted small mb-0">View and manage multiple simulated accounts.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <span class="badge bg-success rounded-pill p-2">📊</span>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Transaction History</h6>
+                                <p class="text-muted small mb-0">View simulated transactions and statements.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <span class="badge bg-info rounded-pill p-2">🔄</span>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Transfers</h6>
+                                <p class="text-muted small mb-0">Simulate money transfers between accounts.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <span class="badge bg-warning rounded-pill p-2">🔐</span>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Secure Access</h6>
+                                <p class="text-muted small mb-0">User authentication and account security.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Important Disclaimer -->
+        <div class="alert alert-danger" role="alert">
+            <h5 class="alert-heading">⚠️ Important Disclaimer</h5>
+            <p class="mb-2">
+                This is a <strong>simulated banking application</strong> created for educational and demonstration purposes only.
+            </p>
+            <ul class="mb-0">
+                <li>No real money or financial transactions occur</li>
+                <li>All account balances are fictional</li>
+                <li>Do not use personal financial information</li>
+                <li>This is not a real banking service</li>
+            </ul>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="d-grid gap-2 d-sm-flex justify-content-center mb-5">
+            <a href="/login" class="btn btn-primary btn-lg">
+                🔑 Login
+            </a>
+            <a href="/register" class="btn btn-outline-primary btn-lg">
+                📝 Register
+            </a>
+        </div>
+
+        <!-- Info Section -->
+        <div class="card bg-light">
+            <div class="card-body">
+                <h6 class="card-title">Getting Started</h6>
+                <p class="card-text small mb-2">
+                    New user? Click the <strong>Register</strong> button to create a demo account.
+                </p>
+                <p class="card-text small mb-0">
+                    Existing user? Click the <strong>Login</strong> button to access your account.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
