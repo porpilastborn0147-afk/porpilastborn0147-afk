@@ -1,144 +1,184 @@
-```html name=templates/dashboard.html
 {% extends "base.html" %}
 
-{% block title %}Dashboard - Demo Bank{% endblock %}
+{% block title %}Dashboard - Flask Banking Demo{% endblock %}
 
 {% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Dashboard</h2>
+            <div class="btn-group" role="group">
+                <a href="/transfer" class="btn btn-success">
+                    🔄 Transfer
+                </a>
+                <a href="/settings" class="btn btn-secondary">
+                    ⚙️ Settings
+                </a>
+                <a href="/logout" class="btn btn-danger">
+                    🚪 Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Simulation Warning -->
+<div class="alert alert-warning" role="alert">
+    <strong>⚠️ Simulation Notice:</strong> All account balances, transactions, and data displayed on this dashboard are completely simulated. 
+    This is a demonstration application only. No real money or actual banking transactions are involved.
+</div>
+
+<!-- Account Balance Card -->
+<div class="row mb-4">
+    <div class="col-lg-4 col-md-6 mx-auto">
+        <div class="card border-primary shadow-sm">
+            <div class="card-body">
+                <p class="card-text text-muted mb-2">Total Account Balance</p>
+                <h3 class="card-title text-primary mb-0">
+                    💰 $2,000,000.00
+                </h3>
+                <small class="text-muted">Demo Account (Simulated)</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="row mb-4">
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="text-success mb-2">📊 Income</h5>
+                <p class="card-text h6 mb-0">+$50,000.00</p>
+                <small class="text-muted">This Month</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="text-danger mb-2">💸 Expenses</h5>
+                <p class="card-text h6 mb-0">-$15,000.00</p>
+                <small class="text-muted">This Month</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="text-info mb-2">📈 Growth</h5>
+                <p class="card-text h6 mb-0">+8.5%</p>
+                <small class="text-muted">Year Over Year</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="text-warning mb-2">🎯 Savings Goal</h5>
+                <p class="card-text h6 mb-0">$5,000,000</p>
+                <small class="text-muted">Target Balance</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Transactions Section -->
 <div class="row">
-  <div class="col-12 mb-4">
-    <div class="d-flex justify-content-between align-items-center">
-      <div>
-        <h2 class="mb-0">Dashboard</h2>
-        <p class="text-muted small mb-0">Overview of your simulated accounts and recent demo transactions.</p>
-      </div>
-      <div class="text-end">
-        <a href="{{ url_for('create_account') }}" class="btn btn-outline-secondary btn-sm">Create Account</a>
-        <a href="{{ url_for('settings') }}" class="btn btn-outline-secondary btn-sm">Account Settings</a>
-      </div>
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="card-title mb-0">Recent Simulated Transactions</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <small>Aug 05, 2026</small>
+                            </td>
+                            <td>Salary Deposit</td>
+                            <td><span class="badge bg-success">Income</span></td>
+                            <td class="text-success fw-bold">+$50,000.00</td>
+                            <td>$2,000,000.00</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <small>Aug 04, 2026</small>
+                            </td>
+                            <td>Online Shopping</td>
+                            <td><span class="badge bg-danger">Expense</span></td>
+                            <td class="text-danger fw-bold">-$250.50</td>
+                            <td>$1,950,000.00</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <small>Aug 03, 2026</small>
+                            </td>
+                            <td>Utility Payment</td>
+                            <td><span class="badge bg-warning">Bills</span></td>
+                            <td class="text-danger fw-bold">-$150.00</td>
+                            <td>$1,950,250.50</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <small>Aug 02, 2026</small>
+                            </td>
+                            <td>Restaurant</td>
+                            <td><span class="badge bg-info">Food</span></td>
+                            <td class="text-danger fw-bold">-$89.99</td>
+                            <td>$1,950,400.50</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <small>Aug 01, 2026</small>
+                            </td>
+                            <td>Transfer to Savings</td>
+                            <td><span class="badge bg-secondary">Transfer</span></td>
+                            <td class="text-danger fw-bold">-$100,000.00</td>
+                            <td>$1,950,490.49</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <small>Jul 31, 2026</small>
+                            </td>
+                            <td>Freelance Project</td>
+                            <td><span class="badge bg-success">Income</span></td>
+                            <td class="text-success fw-bold">+$5,000.00</td>
+                            <td>$2,050,490.49</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer text-center">
+                <a href="/transactions" class="text-decoration-none">View All Transactions →</a>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-<div class="row g-4">
-  <div class="col-md-4">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">DEMO Balance (Displayed)</h6>
-        <h3 class="card-title mb-1 text-success">$2,000,000.00</h3>
-        <p class="small text-muted mb-2">This is a demonstration balance. All funds shown are simulated.</p>
-        {% if total_balance is defined %}
-          <p class="mb-0 small-muted">Current account total: 
-            {% if format_currency is defined %}
-              {{ format_currency(total_balance) }}
-            {% else %}
-              {{ "$" ~ ('%.2f' % total_balance) }}
-            {% endif %}
-          </p>
-        {% endif %}
-      </div>
-    </div>
-
-    <div class="card mt-3 shadow-sm">
-      <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Your Accounts</h6>
-        {% if accounts %}
-          <ul class="list-group list-group-flush">
-            {% for acc in accounts %}
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                  <strong>{{ acc.name }}</strong><br>
-                  <small class="text-muted">ID: {{ acc.id }}</small>
-                </div>
-                <div>
-                  {% if format_currency is defined %}
-                    {{ format_currency(acc.balance) }}
-                  {% else %}
-                    {{ "$" ~ ('%.2f' % acc.balance) }}
-                  {% endif %}
-                </div>
-              </li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p class="small text-muted mb-0">No accounts yet. Create one to begin simulating transfers.</p>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-8">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="card-title mb-0">Recent Simulated Transactions</h5>
-          <span class="small text-muted">All transactions are simulated</span>
-        </div>
-
-        {% if transactions %}
-          <div class="table-responsive">
-            <table class="table table-hover table-sm align-middle">
-              <thead>
-                <tr>
-                  <th style="min-width:150px">Date</th>
-                  <th>Account</th>
-                  <th>Description</th>
-                  <th class="text-end">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for t in transactions %}
-                  <tr>
-                    <td class="text-nowrap">
-                      {% if t.timestamp is defined %}
-                        {{ t.timestamp.strftime("%Y-%m-%d %H:%M:%S") }}
-                      {% else %}
-                        -
-                      {% endif %}
-                    </td>
-                    <td>
-                      {% if t.account is defined %}
-                        {{ t.account.name }} <br><small class="text-muted">ID: {{ t.account.id }}</small>
-                      {% else %}
-                        <small class="text-muted">Account {{ t.account_id }}</small>
-                      {% endif %}
-                    </td>
-                    <td>
-                      {{ t.description or t.type }}
-                      {% if t.other_account %}
-                        <br><small class="text-muted">Other: {{ t.other_account }}</small>
-                      {% endif %}
-                    </td>
-                    <td class="text-end">
-                      {% if format_currency is defined %}
-                        {{ format_currency(t.amount) }}
-                      {% else %}
-                        {{ "$" ~ ('%.2f' % t.amount) }}
-                      {% endif %}
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        {% else %}
-          <p class="small text-muted mb-0">No simulated transactions yet. Try transferring funds between accounts to generate transactions.</p>
-        {% endif %}
-
-        <div class="mt-3 d-flex justify-content-end">
-          <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-outline-primary me-2">Refresh</a>
-          <a href="{{ url_for('create_account') }}" class="btn btn-sm btn-success">Create Account</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+<!-- Simulation Disclaimer Card -->
 <div class="row mt-4">
-  <div class="col-12">
-    <div class="alert alert-warning small mb-0" role="alert">
-      <strong>DEMO:</strong> This is a demonstration application. All balances and transactions shown above are simulated for demo purposes only — no real banking is performed.
+    <div class="col-lg-8 mx-auto">
+        <div class="card bg-light border-secondary">
+            <div class="card-body">
+                <h6 class="card-title">🎓 Educational Demo</h6>
+                <p class="card-text small mb-0">
+                    This banking dashboard is a demonstration application created for educational purposes. All balances, transactions, 
+                    dates, and financial data shown are completely fictional and simulated. No real financial transactions or actual 
+                    money are involved. Use this application to learn about banking interfaces and financial management concepts.
+                </p>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 {% endblock %}
-```
