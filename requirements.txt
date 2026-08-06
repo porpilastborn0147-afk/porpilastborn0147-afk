@@ -1,0 +1,6 @@
+flask==2.2.5
+flask_sqlalchemy==3.0.3
+flask_bcrypt==1.0.1
+flask_login==0.6.3
+python-dotenv==1.0.0
+gunicorn==20.1.0
