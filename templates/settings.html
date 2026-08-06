@@ -1,1 +1,108 @@
-Add account settings page
+```html name=templates/settings.html
+{% extends "base.html" %}
+
+{% block title %}Account Settings - Demo Bank{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h4 class="card-title">Account Settings</h4>
+        <p class="text-muted small">This is a DEMO application — all changes and data are simulated. No real banking occurs here.</p>
+
+        <form method="post" action="{{ url_for('settings') }}" novalidate>
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input id="username" name="username" type="text" class="form-control" value="{{ current_user.username }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input id="email" name="email" type="email" class="form-control" value="{{ current_user.email }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Change Password <small class="text-muted">(leave blank to keep current)</small></label>
+            <input id="password" name="password" type="password" class="form-control" placeholder="New password">
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Back to Dashboard</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Your Demo Accounts</h5>
+        <p class="small text-muted">These accounts and balances are simulated. You may create, modify, or delete them for demo purposes.</p>
+
+        {% if accounts %}
+          <ul class="list-group mb-3">
+            {% for acc in accounts %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ acc.name }}</strong>
+                  <div class="small text-muted">Account ID: {{ acc.id }}</div>
+                </div>
+                <div class="text-end">
+                  <div class="fw-semibold">
+                    {% if format_currency is defined %}
+                      {{ format_currency(acc.balance) }}
+                    {% else %}
+                      ${{ '%.2f'|format(acc.balance) }}
+                    {% endif %}
+                  </div>
+                  <div class="small text-muted">Simulated balance</div>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="small text-muted mb-3">You have no demo accounts yet. Create one from the dashboard.</p>
+        {% endif %}
+
+        <div class="d-flex gap-2">
+          <a href="{{ url_for('create_account') }}" class="btn btn-success">Create New Demo Account</a>
+          <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Return to Dashboard</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card border-danger shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title text-danger">Danger Zone</h5>
+        <p class="small text-muted">Deleting an account is a simulated action in this demo and will remove the account and its simulated transactions from this demo database.</p>
+
+        <form method="post" action="{{ url_for('delete_account') }}" onsubmit="return confirm('Delete selected account? This is simulated and cannot be undone in this demo. Proceed?');">
+          <div class="mb-3">
+            <label for="account_id" class="form-label">Select account to delete</label>
+            <select id="account_id" name="account_id" class="form-select" required>
+              {% if accounts %}
+                {% for acc in accounts %}
+                  <option value="{{ acc.id }}">{{ acc.name }} — {% if format_currency is defined %}{{ format_currency(acc.balance) }}{% else %}${{ '%.2f'|format(acc.balance) }}{% endif %} (ID: {{ acc.id }})</option>
+                {% endfor %}
+              {% else %}
+                <option disabled>No accounts available</option>
+              {% endif %}
+            </select>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-danger">Delete Selected Account (Simulated)</button>
+            <a href="{{ url_for('settings') }}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="mt-3 text-center">
+      <small class="text-muted">DEMO NOTICE: All balances and transactions in this application are simulated for demonstration purposes only.</small>
+    </div>
+  </div>
+</div>
+{% endblock %}
+```
