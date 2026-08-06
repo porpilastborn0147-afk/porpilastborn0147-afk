@@ -1,108 +1,359 @@
-```html name=templates/settings.html
 {% extends "base.html" %}
 
-{% block title %}Account Settings - Demo Bank{% endblock %}
+{% block title %}Settings - Flask Banking Demo{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-lg-8">
-    <div class="card shadow-sm mb-4">
-      <div class="card-body">
-        <h4 class="card-title">Account Settings</h4>
-        <p class="text-muted small">This is a DEMO application — all changes and data are simulated. No real banking occurs here.</p>
-
-        <form method="post" action="{{ url_for('settings') }}" novalidate>
-          <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input id="username" name="username" type="text" class="form-control" value="{{ current_user.username }}" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input id="email" name="email" type="email" class="form-control" value="{{ current_user.email }}" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="password" class="form-label">Change Password <small class="text-muted">(leave blank to keep current)</small></label>
-            <input id="password" name="password" type="password" class="form-control" placeholder="New password">
-          </div>
-
-          <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Back to Dashboard</a>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <div class="card shadow-sm mb-4">
-      <div class="card-body">
-        <h5 class="card-title">Your Demo Accounts</h5>
-        <p class="small text-muted">These accounts and balances are simulated. You may create, modify, or delete them for demo purposes.</p>
-
-        {% if accounts %}
-          <ul class="list-group mb-3">
-            {% for acc in accounts %}
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                  <strong>{{ acc.name }}</strong>
-                  <div class="small text-muted">Account ID: {{ acc.id }}</div>
-                </div>
-                <div class="text-end">
-                  <div class="fw-semibold">
-                    {% if format_currency is defined %}
-                      {{ format_currency(acc.balance) }}
-                    {% else %}
-                      ${{ '%.2f'|format(acc.balance) }}
-                    {% endif %}
-                  </div>
-                  <div class="small text-muted">Simulated balance</div>
-                </div>
-              </li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p class="small text-muted mb-3">You have no demo accounts yet. Create one from the dashboard.</p>
-        {% endif %}
-
-        <div class="d-flex gap-2">
-          <a href="{{ url_for('create_account') }}" class="btn btn-success">Create New Demo Account</a>
-          <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Return to Dashboard</a>
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>⚙️ Settings</h2>
+            <a href="/logout" class="btn btn-danger">
+                🚪 Logout
+            </a>
         </div>
-      </div>
+
+        <!-- Demo Application Notice -->
+        <div class="alert alert-info" role="alert">
+            <strong>ℹ️ Demo Application:</strong> This is a demonstration banking application. 
+            All profile changes and security settings are simulated for educational purposes only.
+        </div>
+
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs mb-4" id="settingsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab">
+                    👤 Profile
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab">
+                    🔐 Security
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="preferences-tab" data-bs-toggle="tab" data-bs-target="#preferences" type="button" role="tab">
+                    🎨 Preferences
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="settingsTabContent">
+            <!-- Profile Tab -->
+            <div class="tab-pane fade show active" id="profile" role="tabpanel">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="card-title mb-0">Profile Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="/settings/profile" novalidate>
+                            <!-- Full Name Field -->
+                            <div class="mb-3">
+                                <label for="fullname" class="form-label">Full Name</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="fullname" 
+                                    name="fullname" 
+                                    value="John Doe"
+                                    placeholder="Enter your full name"
+                                    required
+                                >
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input 
+                                    type="email" 
+                                    class="form-control" 
+                                    id="email" 
+                                    name="email" 
+                                    value="john.doe@example.com"
+                                    placeholder="Enter your email"
+                                    required
+                                >
+                            </div>
+
+                            <!-- Phone Field -->
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input 
+                                    type="tel" 
+                                    class="form-control" 
+                                    id="phone" 
+                                    name="phone" 
+                                    value="+1 (555) 123-4567"
+                                    placeholder="Enter your phone number"
+                                >
+                            </div>
+
+                            <!-- Address Field -->
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="address" 
+                                    name="address" 
+                                    value="123 Main Street, Anytown, USA"
+                                    placeholder="Enter your address"
+                                >
+                            </div>
+
+                            <!-- Account Status -->
+                            <div class="mb-4">
+                                <label class="form-label">Account Status</label>
+                                <div class="alert alert-success mb-0">
+                                    <strong>✅ Active</strong> - Your demo account is active and fully functional.
+                                </div>
+                            </div>
+
+                            <!-- Save Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    💾 Save Profile Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Tab -->
+            <div class="tab-pane fade" id="security" role="tabpanel">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="card-title mb-0">Change Password</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="/settings/password" novalidate>
+                            <!-- Current Password Field -->
+                            <div class="mb-3">
+                                <label for="current_password" class="form-label">Current Password</label>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="current_password" 
+                                    name="current_password" 
+                                    placeholder="Enter your current password"
+                                    required
+                                >
+                            </div>
+
+                            <!-- New Password Field -->
+                            <div class="mb-3">
+                                <label for="new_password" class="form-label">New Password</label>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="new_password" 
+                                    name="new_password" 
+                                    placeholder="Enter your new password"
+                                    required
+                                >
+                                <small class="form-text text-muted">Minimum 6 characters recommended.</small>
+                            </div>
+
+                            <!-- Confirm New Password Field -->
+                            <div class="mb-4">
+                                <label for="confirm_password" class="form-label">Confirm New Password</label>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="confirm_password" 
+                                    name="confirm_password" 
+                                    placeholder="Confirm your new password"
+                                    required
+                                >
+                            </div>
+
+                            <!-- Security Info -->
+                            <div class="alert alert-info mb-4">
+                                <strong>🔐 Security Tip:</strong> Use a strong password with a mix of uppercase, 
+                                lowercase, numbers, and special characters.
+                            </div>
+
+                            <!-- Save Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    🔐 Update Password
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Two-Factor Authentication Card -->
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-light">
+                        <h5 class="card-title mb-0">Two-Factor Authentication</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-3">Add an extra layer of security to your account.</p>
+                        <div class="d-grid">
+                            <button type="button" class="btn btn-outline-primary btn-lg" disabled>
+                                🔒 Enable Two-Factor Authentication (Demo)
+                            </button>
+                        </div>
+                        <small class="form-text text-muted d-block mt-3">
+                            This feature is disabled in the demo application.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preferences Tab -->
+            <div class="tab-pane fade" id="preferences" role="tabpanel">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="card-title mb-0">Application Preferences</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="/settings/preferences" novalidate>
+                            <!-- Notification Preferences -->
+                            <div class="mb-4">
+                                <h6 class="mb-3">📧 Notifications</h6>
+                                <div class="form-check mb-2">
+                                    <input 
+                                        class="form-check-input" 
+                                        type="checkbox" 
+                                        id="email_notifications" 
+                                        name="email_notifications"
+                                        checked
+                                    >
+                                    <label class="form-check-label" for="email_notifications">
+                                        Email Notifications
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input 
+                                        class="form-check-input" 
+                                        type="checkbox" 
+                                        id="transaction_alerts" 
+                                        name="transaction_alerts"
+                                        checked
+                                    >
+                                    <label class="form-check-label" for="transaction_alerts">
+                                        Transaction Alerts
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input 
+                                        class="form-check-input" 
+                                        type="checkbox" 
+                                        id="promotional_emails" 
+                                        name="promotional_emails"
+                                    >
+                                    <label class="form-check-label" for="promotional_emails">
+                                        Promotional Emails
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Theme Preference -->
+                            <div class="mb-4">
+                                <h6 class="mb-3">🎨 Theme</h6>
+                                <div class="form-check mb-2">
+                                    <input 
+                                        class="form-check-input" 
+                                        type="radio" 
+                                        id="theme_light" 
+                                        name="theme"
+                                        value="light"
+                                        checked
+                                    >
+                                    <label class="form-check-label" for="theme_light">
+                                        Light Mode
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input 
+                                        class="form-check-input" 
+                                        type="radio" 
+                                        id="theme_dark" 
+                                        name="theme"
+                                        value="dark"
+                                    >
+                                    <label class="form-check-label" for="theme_dark">
+                                        Dark Mode
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input 
+                                        class="form-check-input" 
+                                        type="radio" 
+                                        id="theme_auto" 
+                                        name="theme"
+                                        value="auto"
+                                    >
+                                    <label class="form-check-label" for="theme_auto">
+                                        Auto (System Default)
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Language Preference -->
+                            <div class="mb-4">
+                                <label for="language" class="form-label">🌐 Language</label>
+                                <select class="form-select" id="language" name="language">
+                                    <option value="en" selected>English</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                </select>
+                            </div>
+
+                            <!-- Save Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    💾 Save Preferences
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="card border-danger mt-4 shadow-sm">
+            <div class="card-header bg-danger bg-opacity-10 border-danger">
+                <h5 class="card-title text-danger mb-0">⚠️ Danger Zone</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-3">Irreversible actions that cannot be undone.</p>
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-outline-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        🗑️ Delete Account (Demo)
+                    </button>
+                </div>
+                <small class="form-text text-muted d-block mt-3">
+                    This action is disabled in the demo application.
+                </small>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="card border-danger shadow-sm">
-      <div class="card-body">
-        <h5 class="card-title text-danger">Danger Zone</h5>
-        <p class="small text-muted">Deleting an account is a simulated action in this demo and will remove the account and its simulated transactions from this demo database.</p>
-
-        <form method="post" action="{{ url_for('delete_account') }}" onsubmit="return confirm('Delete selected account? This is simulated and cannot be undone in this demo. Proceed?');">
-          <div class="mb-3">
-            <label for="account_id" class="form-label">Select account to delete</label>
-            <select id="account_id" name="account_id" class="form-select" required>
-              {% if accounts %}
-                {% for acc in accounts %}
-                  <option value="{{ acc.id }}">{{ acc.name }} — {% if format_currency is defined %}{{ format_currency(acc.balance) }}{% else %}${{ '%.2f'|format(acc.balance) }}{% endif %} (ID: {{ acc.id }})</option>
-                {% endfor %}
-              {% else %}
-                <option disabled>No accounts available</option>
-              {% endif %}
-            </select>
-          </div>
-
-          <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-danger">Delete Selected Account (Simulated)</button>
-            <a href="{{ url_for('settings') }}" class="btn btn-outline-secondary">Cancel</a>
-          </div>
-        </form>
-      </div>
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-danger">
+                <h5 class="modal-title">Delete Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Warning:</strong> This action is permanent and cannot be undone.</p>
+                <p>This is a demo application, so no actual account data will be deleted.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" disabled>Delete Account (Demo)</button>
+            </div>
+        </div>
     </div>
-
-    <div class="mt-3 text-center">
-      <small class="text-muted">DEMO NOTICE: All balances and transactions in this application are simulated for demonstration purposes only.</small>
-    </div>
-  </div>
 </div>
 {% endblock %}
-```
