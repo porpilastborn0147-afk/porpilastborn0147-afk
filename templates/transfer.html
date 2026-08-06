@@ -1,1 +1,93 @@
-Add transfer page
+```html name=templates/transfer.html
+{% extends "base.html" %}
+
+{% block title %}Transfer Funds - Demo Bank{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h4 class="card-title mb-1">Simulated Transfer</h4>
+        <p class="text-muted small mb-3">This is a DEMO action — all balances and transactions are simulated. No real money moves.</p>
+
+        <form method="post" action="{{ url_for('transfer') }}" novalidate>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="from_account" class="form-label">From (your account)</label>
+              <select id="from_account" name="from_account" class="form-select" required>
+                {% if accounts %}
+                  {% for acc in accounts %}
+                    <option value="{{ acc.id }}">{{ acc.name }} — {% if format_currency is defined %}{{ format_currency(acc.balance) }}{% else %}${{ '%.2f'|format(acc.balance) }}{% endif %}</option>
+                  {% endfor %}
+                {% else %}
+                  <option disabled>No accounts available</option>
+                {% endif %}
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="to_account" class="form-label">To (account id or recipient)</label>
+              <input id="to_account" name="to_account" type="text" class="form-control" placeholder="Recipient account id or description" required>
+              <div class="form-text small text-muted">You may enter one of your account IDs or an external demo recipient identifier.</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="amount" class="form-label">Amount (USD)</label>
+              <input id="amount" name="amount" type="number" class="form-control" step="0.01" min="0.01" placeholder="0.00" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="note" class="form-label">Note (optional)</label>
+              <input id="note" name="note" type="text" class="form-control" placeholder="Payment for...">
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Send (Simulated)</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title mb-2">Recent Simulated Transactions</h5>
+        <p class="small text-muted mb-3">These are sample/demo transactions. Transfers you perform here will appear in this list.</p>
+
+        {% if transactions %}
+          <div class="table-responsive">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Account</th>
+                  <th>Description</th>
+                  <th class="text-end">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for t in transactions %}
+                  <tr>
+                    <td class="text-nowrap">{{ t.timestamp.strftime("%Y-%m-%d %H:%M:%S") if t.timestamp else '-' }}</td>
+                    <td>
+                      {% if t.account %}{{ t.account.name }} <br><small class="text-muted">ID: {{ t.account.id }}</small>{% else %}Account {{ t.account_id }}{% endif %}
+                    </td>
+                    <td>{{ t.description or t.type }}{% if t.other_account %}<br><small class="text-muted">Other: {{ t.other_account }}</small>{% endif %}</td>
+                    <td class="text-end">{% if format_currency is defined %}{{ format_currency(t.amount) }}{% else %}${{ '%.2f'|format(t.amount) }}{% endif %}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="small text-muted mb-0">No simulated transactions yet. Make a transfer to create one.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+```
